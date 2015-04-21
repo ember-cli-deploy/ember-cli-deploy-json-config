@@ -43,7 +43,8 @@ describe('the deploy plugin object', function() {
       }).build;
 
       var buildOptions = {
-        project: { root: fakeRoot }
+        project: { root: fakeRoot },
+        data: {}
       };
 
       build(buildOptions)
@@ -60,6 +61,28 @@ describe('the deploy plugin object', function() {
           assert.deepEqual(json.script[1], { src: 'assets/app.js' });
 
           done();
+        })
+        .catch(function(error) {
+          done(error);
+        });
+    });
+
+    it ('sets the index.json path in the data object', function(done) {
+      var build = subject.createDeployPlugin({
+        name: 'test-plugin'
+      }).build;
+
+      var data = {};
+      var buildOptions = {
+        project: { root: fakeRoot },
+        data: data
+      };
+
+      build(buildOptions)
+        .then(function() {
+          assert.deepEqual(data, { indexPath: fakeRoot + '/dist/index.json' });
+
+          done()
         })
         .catch(function(error) {
           done(error);

@@ -26,7 +26,10 @@ module.exports = {
 
         return readFile(indexPath)
           .then(this._extractConfig.bind(this), this._handleMissingFile)
-          .then(writeFile.bind(this, outputPath));
+          .then(writeFile.bind(this, outputPath))
+          .then(function() {
+            context.data.indexPath = outputPath;
+          });
       }.bind(this)
     }
   },
