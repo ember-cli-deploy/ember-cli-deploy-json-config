@@ -17,18 +17,18 @@ module.exports = {
     return {
       name: options.name,
 
-      build: function(context) {
-        var project    = context.project;
+      didBuild: function(context) {
+        var deployment = context.deployment;
+        var project    = deployment.project;
         var root       = project.root;
-        var distPath   = path.join(root, 'dist');
-        var indexPath  = path.join(distPath, 'index.html');
-        var outputPath = path.join(distPath, 'index.json');
+        var indexPath  = path.join(root, (context.indexPath || 'dist/index.html'));
+        var outputPath = path.join(path.dirname(indexPath), 'index.json');
 
         return readFile(indexPath)
           .then(this._extractConfig.bind(this), this._handleMissingFile)
           .then(writeFile.bind(this, outputPath))
           .then(function() {
-            context.data.indexPath = outputPath;
+            return { indexPath: outputPath };
           });
       }.bind(this)
     }
