@@ -33,21 +33,24 @@ describe('the deploy plugin object', function() {
       name: 'test-plugin'
     });
 
-    assert.equal(typeof result.build, 'function');
+    assert.equal(typeof result.didBuild, 'function');
   });
 
-  describe('build hook', function() {
-    it('generates index.json from index.html', function(done) {
-      var build = subject.createDeployPlugin({
+  describe('didBuild hook', function() {
+    it('generates index.json from index.html', function() {
+      var didBuild = subject.createDeployPlugin({
         name: 'test-plugin'
-      }).build;
+      }).didBuild;
 
-      var buildOptions = {
-        project: { root: fakeRoot },
+      var context = {
+        deployment: {
+          project: { root: fakeRoot }
+        },
         data: {}
       };
 
-      build(buildOptions)
+      var promise = didBuild(context);
+      return assert.isFulfilled(promise)
         .then(function() {
           var json = require(fakeRoot + '/dist/index.json');
 
@@ -59,33 +62,26 @@ describe('the deploy plugin object', function() {
           assert.deepEqual(json.link[1], { rel: 'stylesheet', href: 'assets/app.css' });
           assert.deepEqual(json.script[0], { src: 'assets/vendor.js' });
           assert.deepEqual(json.script[1], { src: 'assets/app.js' });
-
-          done();
-        })
-        .catch(function(error) {
-          done(error);
         });
     });
 
-    it ('sets the index.json path in the data object', function(done) {
-      var build = subject.createDeployPlugin({
+    it ('returns the index.json path', function() {
+      var didBuild = subject.createDeployPlugin({
         name: 'test-plugin'
-      }).build;
+      }).didBuild;
 
       var data = {};
-      var buildOptions = {
-        project: { root: fakeRoot },
-        data: data
+      var context = {
+        indexPath: 'dist/index.html',
+        deployment: {
+          project: { root: fakeRoot }
+        }
       };
 
-      build(buildOptions)
-        .then(function() {
-          assert.deepEqual(data, { indexPath: fakeRoot + '/dist/index.json' });
-
-          done()
-        })
-        .catch(function(error) {
-          done(error);
+      var promise = didBuild(context);
+      return assert.isFulfilled(promise)
+        .then(function(result) {
+          assert.equal(result.indexPath, fakeRoot + '/dist/index.json');
         });
     });
   });

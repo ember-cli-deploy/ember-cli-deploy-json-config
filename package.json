@@ -47,7 +47,6 @@
     "rsvp": "^3.0.18"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config",
-    "after": "ember-cli-deploy-build"
+    "configPath": "tests/dummy/config"
   }
 }
