@@ -1,72 +1,84 @@
 /* jshint node: true */
 'use strict';
 
-var cheerio   = require('cheerio');
 var path      = require('path');
 var fs        = require('fs');
+var chalk     = require('chalk');
 var RSVP      = require('rsvp');
+var Promise   = RSVP.Promise;
 var denodeify = RSVP.denodeify;
 
 var readFile  = denodeify(fs.readFile);
 var writeFile = denodeify(fs.writeFile);
 
+var blue      = chalk.blue;
+var red       = chalk.red;
+
+var validateConfig = require('./lib/utilities/validate-config');
+var extractConfig  = require('./lib/utilities/extract-index-config');
+
 module.exports = {
   name: 'ember-cli-deploy-json-config',
 
   createDeployPlugin: function(options) {
+    function _beginMessage(ui, inputPattern, outputPattern) {
+      ui.write(blue('|      '));
+      ui.writeLine(blue('- generating `' + outputPattern + '` from `' + inputPattern + '`'));
+
+      return Promise.resolve();
+    }
+
+    function _successMessage(ui, outputPattern) {
+      ui.write(blue('|      '));
+      ui.writeLine(blue('- generated: `' + outputPattern + '`'));
+
+      return Promise.resolve(outputPattern);
+    }
+
+    function _errorMessage(ui, error) {
+      ui.write(blue('|      '));
+      ui.write(red('- ' + error + '`\n'));
+
+      return Promise.reject(error);
+    }
+
     return {
       name: options.name,
 
+      willDeploy: function(context) {
+        var deployment = context.deployment;
+        var ui         = deployment.ui;
+        var config     = deployment.config[this.name] = deployment.config[this.name] || {};
+
+        return validateConfig(ui, config)
+          .then(function() {
+            ui.write(blue('|    '));
+            ui.writeLine(blue('- config ok'));
+          });
+      },
+
       didBuild: function(context) {
         var deployment = context.deployment;
+        var ui         = deployment.ui;
+        var config     = deployment.config[this.name];
         var project    = deployment.project;
         var root       = project.root;
-        var indexPath  = path.join(root, (context.indexPath || 'dist/index.html'));
-        var outputPath = path.join(path.dirname(indexPath), 'index.json');
 
-        return readFile(indexPath)
-          .then(this._extractConfig.bind(this), this._handleMissingFile)
-          .then(writeFile.bind(this, outputPath))
-          .then(function() {
-            return { indexPath: outputPath };
-          });
-      }.bind(this)
+        var fileInputPattern  = config.fileInputPattern;
+        var fileOutputPattern = config.fileOutputPattern;
+        var inputPath         = path.join(root, fileInputPattern);
+        var outputPath        = path.join(root, fileOutputPattern);
+
+        return _beginMessage(ui, fileInputPattern, fileOutputPattern)
+          .then(readFile.bind(readFile, inputPath))
+          .then(extractConfig.bind(this))
+          .then(writeFile.bind(writeFile, outputPath))
+          .then(_successMessage.bind(this, ui, fileOutputPattern))
+          .then(function(outputPattern) {
+            return { distFiles: [outputPattern] };
+          })
+          .catch(_errorMessage.bind(this, ui));
+      }
     }
-  },
-
-  _extractConfig: function(data) {
-    var $ = cheerio.load(data.toString());
-    var json = {
-      base: this._get($, 'base', ['href']),
-      meta: this._get($, 'meta[name*="/config/environment"]', ['name', 'content']),
-      link: this._get($, 'link', ['rel', 'href']),
-      script: this._get($, 'script', ['src'])
-    };
-
-    return RSVP.resolve(JSON.stringify(json));
-  },
-
-  _handleMissingFile: function() {
-    return RSVP.resolve();
-  },
-
-  _get: function($, selector, attributes) {
-    attributes = attributes || [];
-    var config = [];
-    var $tags = $(selector);
-
-    $tags.each(function() {
-      var $tag = $(this);
-
-      var data = attributes.reduce(function(data, attribute) {
-        data[attribute] = $tag.attr(attribute);
-
-        return data;
-      }, {});
-
-      config.push(data);
-    });
-
-    return config;
   }
 };
