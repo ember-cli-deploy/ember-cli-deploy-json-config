@@ -33,23 +33,53 @@ describe('the deploy plugin object', function() {
       name: 'test-plugin'
     });
 
+    assert.equal(typeof result.willDeploy, 'function');
     assert.equal(typeof result.didBuild, 'function');
+  });
+
+  describe('willDeploy hook', function() {
+    it('resolves if config is ok', function() {
+      var plugin = subject.createDeployPlugin({
+        name: 'json-config'
+      });
+
+      var context = {
+        deployment: {
+          ui: { write: function() {}, writeLine: function() {} },
+          config: {
+            'json-config': {
+              fileInputPattern: 'dist/index.html',
+              fileOutputPattern: 'dist/index.json'
+            }
+          }
+        }
+      };
+
+      return assert.isFulfilled(plugin.willDeploy.call(plugin, context))
+    });
   });
 
   describe('didBuild hook', function() {
     it('generates index.json from index.html', function() {
-      var didBuild = subject.createDeployPlugin({
-        name: 'test-plugin'
-      }).didBuild;
+      var plugin = subject.createDeployPlugin({
+        name: 'json-config'
+      });
 
       var context = {
         deployment: {
-          project: { root: fakeRoot }
+          project: { root: fakeRoot },
+          ui: {write: function() {}, writeLine: function() {}},
+          config: {
+            'json-config': {
+              fileInputPattern: 'dist/index.html',
+              fileOutputPattern: 'dist/index.json'
+            }
+          }
         },
         data: {}
       };
 
-      var promise = didBuild(context);
+      var promise = plugin.didBuild.call(plugin, context);
       return assert.isFulfilled(promise)
         .then(function() {
           var json = require(fakeRoot + '/dist/index.json');
@@ -66,22 +96,28 @@ describe('the deploy plugin object', function() {
     });
 
     it ('returns the index.json path', function() {
-      var didBuild = subject.createDeployPlugin({
-        name: 'test-plugin'
-      }).didBuild;
+      var plugin = subject.createDeployPlugin({
+        name: 'json-config'
+      });
 
       var data = {};
       var context = {
-        indexPath: 'dist/index.html',
         deployment: {
-          project: { root: fakeRoot }
+          project: { root: fakeRoot },
+          ui: {write: function() {}, writeLine: function() {}},
+          config: {
+            'json-config': {
+              fileInputPattern: 'dist/index.html',
+              fileOutputPattern: 'dist/index.json'
+            }
+          }
         }
       };
 
-      var promise = didBuild(context);
+      var promise = plugin.didBuild.call(plugin, context);
       return assert.isFulfilled(promise)
         .then(function(result) {
-          assert.equal(result.indexPath, fakeRoot + '/dist/index.json');
+          assert.deepEqual(result.distFiles, ['dist/index.json']);
         });
     });
   });
