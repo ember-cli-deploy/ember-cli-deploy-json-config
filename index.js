@@ -21,22 +21,22 @@ module.exports = {
   name: 'ember-cli-deploy-json-config',
 
   createDeployPlugin: function(options) {
-    function _beginMessage(ui, inputPattern, outputPattern) {
-      ui.write(blue('|      '));
-      ui.writeLine(blue('- generating `' + outputPattern + '` from `' + inputPattern + '`'));
+    function _beginMessage(ui, inputPath, outputPath) {
+      ui.write(blue('|    '));
+      ui.writeLine(blue('- generating `' + outputPath + '` from `' + inputPath + '`'));
 
       return Promise.resolve();
     }
 
-    function _successMessage(ui, outputPattern) {
-      ui.write(blue('|      '));
-      ui.writeLine(blue('- generated: `' + outputPattern + '`'));
+    function _successMessage(ui, outputPath) {
+      ui.write(blue('|    '));
+      ui.writeLine(blue('- generated: `' + outputPath + '`'));
 
-      return Promise.resolve(outputPattern);
+      return Promise.resolve();
     }
 
     function _errorMessage(ui, error) {
-      ui.write(blue('|      '));
+      ui.write(blue('|    '));
       ui.write(red('- ' + error + '`\n'));
 
       return Promise.reject(error);
@@ -62,20 +62,26 @@ module.exports = {
         var ui         = deployment.ui;
         var config     = deployment.config[this.name];
         var project    = deployment.project;
-        var root       = project.root;
 
-        var fileInputPattern  = config.fileInputPattern;
-        var fileOutputPattern = config.fileOutputPattern;
-        var inputPath         = path.join(root, fileInputPattern);
-        var outputPath        = path.join(root, fileOutputPattern);
+        var root               = project.root;
+        var distDir            = context.distDir;
+        var fileInputPattern   = config.fileInputPattern;
+        var fileOutputPattern  = config.fileOutputPattern;
+        var inputPath          = path.join(distDir, fileInputPattern);
+        var outputPath         = path.join(distDir, fileOutputPattern);
+        var absoluteInputPath  =  path.join(root, inputPath);
+        var absoluteOutputPath =  path.join(root, outputPath);
 
-        return _beginMessage(ui, fileInputPattern, fileOutputPattern)
-          .then(readFile.bind(readFile, inputPath))
+        return _beginMessage(ui, inputPath, outputPath)
+          .then(readFile.bind(readFile, absoluteInputPath))
           .then(extractConfig.bind(this))
-          .then(writeFile.bind(writeFile, outputPath))
-          .then(_successMessage.bind(this, ui, fileOutputPattern))
-          .then(function(outputPattern) {
-            return { distFiles: [outputPattern] };
+          .then(writeFile.bind(writeFile, absoluteOutputPath))
+          .then(_successMessage.bind(this, ui, outputPath))
+          .then(function() {
+            ui.write(blue('|    '));
+            ui.writeLine(blue('- added `' + fileOutputPattern + '` to `context.distFiles`'));
+
+            return { distFiles: [fileOutputPattern] };
           })
           .catch(_errorMessage.bind(this, ui));
       }

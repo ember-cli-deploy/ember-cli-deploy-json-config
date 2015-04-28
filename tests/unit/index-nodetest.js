@@ -66,13 +66,14 @@ describe('the deploy plugin object', function() {
       });
 
       var context = {
+        distDir: 'dist',
         deployment: {
           project: { root: fakeRoot },
           ui: {write: function() {}, writeLine: function() {}},
           config: {
             'json-config': {
-              fileInputPattern: 'dist/index.html',
-              fileOutputPattern: 'dist/index.json'
+              fileInputPattern: 'index.html',
+              fileOutputPattern: 'index.json'
             }
           }
         },
@@ -102,13 +103,14 @@ describe('the deploy plugin object', function() {
 
       var data = {};
       var context = {
+        distDir: 'dist',
         deployment: {
           project: { root: fakeRoot },
           ui: {write: function() {}, writeLine: function() {}},
           config: {
             'json-config': {
-              fileInputPattern: 'dist/index.html',
-              fileOutputPattern: 'dist/index.json'
+              fileInputPattern: 'index.html',
+              fileOutputPattern: 'index.json'
             }
           }
         }
@@ -117,7 +119,7 @@ describe('the deploy plugin object', function() {
       var promise = plugin.didBuild.call(plugin, context);
       return assert.isFulfilled(promise)
         .then(function(result) {
-          assert.deepEqual(result.distFiles, ['dist/index.json']);
+          assert.deepEqual(result.distFiles, ['index.json']);
         });
     });
   });
