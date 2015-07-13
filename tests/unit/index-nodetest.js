@@ -5,82 +5,59 @@ var path   = require('path');
 var assert = require('ember-cli/tests/helpers/assert');
 
 describe('the deploy plugin object', function() {
-  var subject;
   var fakeRoot;
+  var plugin;
+  var promise;
 
   before(function() {
-    subject = require('../../index');
     fakeRoot =  process.cwd() + '/tests/fixtures';
   });
 
   beforeEach(function() {
+    var subject = require('../../index');
     var jsonPath = fakeRoot + '/dist/index.json';
     if (fs.existsSync(jsonPath)) {
       fs.unlinkSync(jsonPath);
     }
+
+    var mockUi = {write: function() {}, writeLine: function() {}};
+
+    plugin = subject.createDeployPlugin({
+      name: 'json-config'
+    });
+
+    var context = {
+      ui: mockUi,
+      config: {
+        'json-config': {
+          fileInputPattern: 'index.html',
+          fileOutputPattern: 'index.json',
+          distDir: function(context) {
+            return 'dist';
+          },
+          projectRoot: function(context) {
+            return fakeRoot;
+          }
+        }
+      }
+    };
+
+    plugin.beforeHook(context);
+    plugin.configure(context);
+
+    promise = plugin.didBuild.call(plugin, context);
   });
 
   it('has a name', function() {
-    var result = subject.createDeployPlugin({
-      name: 'test-plugin'
-    });
-
-    assert.equal('test-plugin', result.name);
+    assert.equal('json-config', plugin.name);
   });
 
   it('implements the correct hooks', function() {
-    var result = subject.createDeployPlugin({
-      name: 'test-plugin'
-    });
-
-    assert.equal(typeof result.willDeploy, 'function');
-    assert.equal(typeof result.didBuild, 'function');
-  });
-
-  describe('willDeploy hook', function() {
-    it('resolves if config is ok', function() {
-      var plugin = subject.createDeployPlugin({
-        name: 'json-config'
-      });
-
-      var context = {
-        deployment: {
-          ui: { write: function() {}, writeLine: function() {} },
-          config: {
-            'json-config': {
-              fileInputPattern: 'dist/index.html',
-              fileOutputPattern: 'dist/index.json'
-            }
-          }
-        }
-      };
-
-      return assert.isFulfilled(plugin.willDeploy.call(plugin, context))
-    });
+    assert.equal(typeof plugin.didBuild, 'function');
   });
 
   describe('didBuild hook', function() {
     it('generates index.json from index.html', function() {
-      var plugin = subject.createDeployPlugin({
-        name: 'json-config'
-      });
-
-      var context = {
-        distDir: 'dist',
-        deployment: {
-          project: { root: fakeRoot },
-          ui: {write: function() {}, writeLine: function() {}},
-          config: {
-            'json-config': {
-              fileInputPattern: 'index.html',
-              fileOutputPattern: 'index.json'
-            }
-          }
-        },
-        data: {}
-      };
-
-      var promise = plugin.didBuild.call(plugin, context);
       return assert.isFulfilled(promise)
         .then(function() {
           var json = require(fakeRoot + '/dist/index.json');
@@ -97,26 +74,6 @@ describe('the deploy plugin object', function() {
     });
 
     it ('returns the index.json path', function() {
-      var plugin = subject.createDeployPlugin({
-        name: 'json-config'
-      });
-
-      var data = {};
-      var context = {
-        distDir: 'dist',
-        deployment: {
-          project: { root: fakeRoot },
-          ui: {write: function() {}, writeLine: function() {}},
-          config: {
-            'json-config': {
-              fileInputPattern: 'index.html',
-              fileOutputPattern: 'index.json'
-            }
-          }
-        }
-      };
-
-      var promise = plugin.didBuild.call(plugin, context);
       return assert.isFulfilled(promise)
         .then(function(result) {
           assert.deepEqual(result.distFiles, ['index.json']);
