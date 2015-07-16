@@ -53,6 +53,7 @@ describe('the deploy plugin object', function() {
   });
 
   it('implements the correct hooks', function() {
+    assert.equal(typeof plugin.configure, 'function');
     assert.equal(typeof plugin.didBuild, 'function');
   });
 
