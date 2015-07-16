@@ -27,7 +27,7 @@ module.exports = {
           return context.project.root;
         },
         distDir: function(context) {
-          return context.distDir;
+          return context.distDir || 'tmp/deploy-dist';
         }
       },
 
