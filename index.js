@@ -27,7 +27,25 @@ module.exports = {
           return context.project.root;
         },
         distDir: function(context) {
-          return context.distDir;
+          return context.distDir || 'tmp/deploy-dist';
+        },
+        jsonBlueprint: {
+          base: {
+            selector: 'base',
+            attributes: ['href']
+          },
+          meta: {
+            selector: 'meta[name*="/config/environment"]',
+            attributes: ['name', 'content']
+          },
+          link: {
+            selector: 'link',
+            attributes: ['rel', 'href']
+          },
+          script: {
+            selector: 'script',
+            attributes: ['src']
+          }
         }
       },
 
