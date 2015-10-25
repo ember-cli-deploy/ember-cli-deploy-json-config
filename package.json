@@ -47,7 +47,7 @@
     "chalk": "^1.0.0",
     "cheerio": "^0.19.0",
     "ember-cli-babel": "^5.0.0",
-    "ember-cli-deploy-plugin": "^0.1.1",
+    "ember-cli-deploy-plugin": "0.2.0",
     "rsvp": "^3.0.18"
   },
   "ember-addon": {
