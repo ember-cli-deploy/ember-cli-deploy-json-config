@@ -59,7 +59,7 @@ module.exports = {
         var absoluteInputPath  = path.join(root, inputPath);
         var absoluteOutputPath = path.join(root, outputPath);
 
-        this.log('generating `' + outputPath + '` from `' + inputPath + '`');
+        this.log('generating `' + outputPath + '` from `' + inputPath + '`', { verbose: true });
 
         return readFile(absoluteInputPath)
           .then(extractConfigFromHtmlAsJson.bind(this))
@@ -72,8 +72,8 @@ module.exports = {
       },
 
       _successMessage: function(outputPath, fileOutputPattern) {
-        this.log('generated: `' + outputPath + '`');
-        this.log('added `' + fileOutputPattern + '` to `context.distFiles`');
+        this.log('generated: `' + outputPath + '`', { verbose: true });
+        this.log('added `' + fileOutputPattern + '` to `context.distFiles`', { verbose: true });
         return Promise.resolve();
       },
 
