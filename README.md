@@ -86,11 +86,17 @@ The basic index.html file built by ember-cli will look soemething like this:
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/dummy-app.css">
+    <style>
+      body { background: red; }
+    </style>
   </head>
 
   <body>
     <script src="assets/vendor.js"></script>
     <script src="assets/dummy-app.js"></script>
+    <script>
+        GlobalThing.API_KEY = '123';
+    </script>
   </body>
 </html>
 ```
@@ -121,10 +127,20 @@ This index.html is used to boot the ember app by retrieving the relevant js and 
     },
     {
       "src": "assets/dummy-app.js"
+    },
+    {
+      "content": "GlobalThing.API_KEY = '123';"
+    }
+  ],
+  "style": [
+    {
+      "content": "body { background: red; }"
     }
   ]
 }
 ```
+
+Note that if the `script` tag uses `src` property, it is included as a path, whereas if the `script` tag has javascript content, it is set as the `content` property of the script item. All stylesheet links are included in the `link` property of the output, while inline styles are added to the `style` property.
 
 ## Why would I use this plugin?
 
