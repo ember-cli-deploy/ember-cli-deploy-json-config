@@ -1,5 +1,3 @@
-/* jslint node: true */
-/* globals describe, before, beforeEach, it */
 'use strict';
 
 var fs     = require('fs');

@@ -1,5 +1,3 @@
-/* jslint node: true */
-/* globals describe, before, it */
 'use strict';
 
 var assert = require('ember-cli/tests/helpers/assert');
