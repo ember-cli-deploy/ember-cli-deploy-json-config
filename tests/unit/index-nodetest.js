@@ -1,7 +1,5 @@
 'use strict';
 
-/* globals require, describe, before, beforeEach, it, process */
-
 var fs     = require('fs');
 var path   = require('path');
 var assert = require('ember-cli/tests/helpers/assert');
@@ -98,8 +96,6 @@ describe('the deploy plugin object', function() {
             assert.equal(Object.keys(json).length, 4);
           });
       });
-
-
     });
   });
 });
