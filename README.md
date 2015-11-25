@@ -84,6 +84,7 @@ The basic index.html file built by ember-cli will look soemething like this:
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <base href="/" />
+    <meta name="fern/config/environment" content="%7B22modulePrefix%22%3A%22dummy-app%22%7D" />
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/dummy-app.css">
@@ -105,7 +106,7 @@ This index.html is used to boot the ember app by retrieving the relevant js and 
       "href": "/"
     }
   ],
-  "meta": [],
+  "meta": [{"name":"dummy-app/config/environment","content":"%7B22modulePrefix%22%3A%22dummy-app%22%7D"}],
   "link": [
     {
       "rel": "stylesheet",
