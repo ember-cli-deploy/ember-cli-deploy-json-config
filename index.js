@@ -56,8 +56,8 @@ module.exports = {
         var fileOutputPattern  = this.readConfig('fileOutputPattern');
         var inputPath          = path.join(distDir, fileInputPattern);
         var outputPath         = path.join(distDir, fileOutputPattern);
-        var absoluteInputPath  = path.join(root, inputPath);
-        var absoluteOutputPath = path.join(root, outputPath);
+        var absoluteInputPath  = path.resolve(root, inputPath);
+        var absoluteOutputPath = path.resolve(root, outputPath);
 
         this.log('generating `' + outputPath + '` from `' + inputPath + '`', { verbose: true });
 
