@@ -1,5 +1,7 @@
 'use strict';
 
+/* globals require, describe, before, beforeEach, it, process */
+
 var fs     = require('fs');
 var path   = require('path');
 var assert = require('ember-cli/tests/helpers/assert');
@@ -8,9 +10,11 @@ describe('the deploy plugin object', function() {
   var fakeRoot;
   var plugin;
   var promise;
+  var distDir;
 
   before(function() {
-    fakeRoot =  process.cwd() + '/tests/fixtures';
+    fakeRoot = process.cwd() + '/tests/fixtures';
+    distDir = 'dist';
   });
 
   beforeEach(function() {
@@ -33,7 +37,7 @@ describe('the deploy plugin object', function() {
           fileInputPattern: 'index.html',
           fileOutputPattern: 'index.json',
           distDir: function(context) {
-            return 'dist';
+            return distDir;
           },
           projectRoot: function(context) {
             return fakeRoot;
@@ -79,6 +83,23 @@ describe('the deploy plugin object', function() {
         .then(function(result) {
           assert.deepEqual(result.distFiles, ['index.json']);
         });
+    });
+
+    describe('when the distDir is an absolute path', function() {
+      before(function() {
+        distDir = fakeRoot + '/dist';
+      });
+
+      it('still works', function() {
+        return assert.isFulfilled(promise)
+          .then(function() {
+            var json = require(fakeRoot + '/dist/index.json');
+
+            assert.equal(Object.keys(json).length, 4);
+          });
+      });
+
+
     });
   });
 });
