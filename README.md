@@ -2,9 +2,7 @@
 
 > An ember-cli-deploy plugin to convert index.html to json config
 
-<hr/>
-**WARNING: This plugin is only compatible with ember-cli-deploy versions >= 0.5.0**
-<hr/>
+[![](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-json-config.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
 
 This plugin will take an index.html file and extract the data from it, outputting it to JSON. This can be used by a web server that might want to have more control over the templating of the index.html file on the server while still being able to point to the ember-cli assets deployed by ember-cli-deploy.
 
