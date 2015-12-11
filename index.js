@@ -44,7 +44,12 @@ module.exports = {
           },
           script: {
             selector: 'script',
-            attributes: ['src']
+            attributes: ['src'],
+            allowContent: true
+          },
+          style: {
+            selector: 'style',
+            allowContent: true
           }
         }
       },

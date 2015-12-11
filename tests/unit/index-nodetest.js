@@ -65,7 +65,7 @@ describe('the deploy plugin object', function() {
         .then(function() {
           var json = require(fakeRoot + '/dist/index.json');
 
-          assert.equal(Object.keys(json).length, 4);
+          assert.equal(Object.keys(json).length, 5);
 
           assert.deepEqual(json.base[0], { href: '/' });
           assert.deepEqual(json.meta[0], { name: 'my-app/config/environment', content: 'some-config-values' });
@@ -73,10 +73,12 @@ describe('the deploy plugin object', function() {
           assert.deepEqual(json.link[1], { rel: 'stylesheet', href: 'assets/app.css' });
           assert.deepEqual(json.script[0], { src: 'assets/vendor.js' });
           assert.deepEqual(json.script[1], { src: 'assets/app.js' });
+          assert.deepEqual(json.script[2], { content: '// Do some javascript\nconsole.log("Hello, world");\nvar things = [\'a\', \'b\', \'c\'];\nthings.sort();' });
+          assert.deepEqual(json.style[0], { content: 'body {\n  background-color: red;\n  color: blue;\n}' });
         });
     });
 
-    it ('returns the index.json path', function() {
+    it('returns the index.json path', function() {
       return assert.isFulfilled(promise)
         .then(function(result) {
           assert.deepEqual(result.distFiles, ['index.json']);
@@ -93,7 +95,7 @@ describe('the deploy plugin object', function() {
           .then(function() {
             var json = require(fakeRoot + '/dist/index.json');
 
-            assert.equal(Object.keys(json).length, 4);
+            assert.equal(Object.keys(json).length, 5);
           });
       });
     });
