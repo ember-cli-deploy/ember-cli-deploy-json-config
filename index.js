@@ -40,11 +40,11 @@ module.exports = {
           },
           link: {
             selector: 'link',
-            attributes: ['rel', 'href']
+            attributes: ['rel', 'href', 'integrity']
           },
           script: {
             selector: 'script',
-            attributes: ['src']
+            attributes: ['src', 'integrity']
           }
         }
       },
