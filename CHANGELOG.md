@@ -1,3 +1,12 @@
+## [0.2.0](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/tree/0.2.0) (2016-02-06)
+[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/compare/v0.1.0...0.2.0)
+
+- Added the integrity attribute [\#19](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/pull/19) ([robinvdvleuten](https://github.com/robinvdvleuten))
+- Fix case distDir is an absolute path [\#16](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/pull/16) ([amiel](https://github.com/amiel))
+- Add a minimal config/environment to the example [\#15](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/pull/15) ([amiel](https://github.com/amiel))
+
+## [0.1.0](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/tree/0.1.0) (2015-10-24)
+
 #### Community Contributions
 
 - [#2](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/pull/2) Build index.json from index.html [@achambers](https://github.com/achambers)
