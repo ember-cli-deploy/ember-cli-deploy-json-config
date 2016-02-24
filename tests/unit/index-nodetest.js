@@ -73,6 +73,7 @@ describe('the deploy plugin object', function() {
           assert.deepEqual(json.link[1], { rel: 'stylesheet', href: 'assets/app.css' });
           assert.deepEqual(json.script[0], { src: 'assets/vendor.js', integrity: 'sha256-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC' });
           assert.deepEqual(json.script[1], { src: 'assets/app.js' });
+          assert.deepEqual(json.script[2], { text: "console.log('inline js');" });
         });
     });
 

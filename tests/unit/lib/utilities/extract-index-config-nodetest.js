@@ -23,7 +23,8 @@ describe('extract-index-config', function() {
           },
           script: {
             selector: 'script',
-            attributes: ['src']
+            attributes: ['src'],
+            captureText: true
           }
         };
       }
@@ -38,6 +39,7 @@ describe('extract-index-config', function() {
         assert.deepEqual(json.base[0], { href: '/' });
         assert.deepEqual(json.script[0], { src: 'assets/vendor.js' });
         assert.deepEqual(json.script[1], { src: 'assets/app.js' });
+        assert.deepEqual(json.script[2], { text: "console.log('inline js');" });
       });
   });
 });

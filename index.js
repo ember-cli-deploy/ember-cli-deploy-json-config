@@ -44,7 +44,8 @@ module.exports = {
           },
           script: {
             selector: 'script',
-            attributes: ['src', 'integrity']
+            attributes: ['src', 'integrity'],
+            captureText: true
           }
         }
       },
