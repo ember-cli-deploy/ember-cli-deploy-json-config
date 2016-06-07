@@ -86,6 +86,7 @@ The basic index.html file built by ember-cli will look soemething like this:
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/dummy-app.css">
+    <script>console.log('inline js');</script>
   </head>
 
   <body>
@@ -116,6 +117,9 @@ This index.html is used to boot the ember app by retrieving the relevant js and 
     }
   ],
   "script": [
+    {
+      "text": "console.log('inline js');"
+    }
     {
       "src": "assets/vendor.js"
     },
