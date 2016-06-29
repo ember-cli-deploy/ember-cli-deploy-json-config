@@ -67,6 +67,49 @@ The root directory where the file matching `fileInputPattern` will be searched f
 
 *Default:* `context.distDir`
 
+### jsonBlueprint
+
+The tags, attributes, and values to extract from the output file and into JSON
+
+*Default:* ```javascript
+  {
+    base: {
+      selector: 'base',
+      attributes: ['href']
+    },
+    meta: {
+      selector: 'meta[name*="/config/environment"]',
+      attributes: ['name', 'content']
+    },
+    link: {
+      selector: 'link',
+      attributes: ['rel', 'href', 'integrity']
+    },
+    script: {
+      selector: 'script',
+      attributes: ['src', 'integrity']
+    }
+  }
+```
+
+### jsonBlueprintOverride
+
+If you wish to override just one portion of the jsonBlueprint and leave the rest intact changes made here will
+be merged into jsonBlueprint.
+
+*Default:* `{}`
+
+*Example:*
+```javascript
+  {
+    script: {
+      selector: 'script',
+      attributes: ['src']
+    }
+  }
+```
+Would no longer extract the integrity attribue from script tags to be included.
+
 ## What does a converted index.html file look like?
 
 The basic index.html file built by ember-cli will look soemething like this:

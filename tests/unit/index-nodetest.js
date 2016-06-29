@@ -9,10 +9,14 @@ describe('the deploy plugin object', function() {
   var plugin;
   var promise;
   var distDir;
+  var jsonBlueprint;
+  var jsonBlueprintOverride;
 
   before(function() {
     fakeRoot = process.cwd() + '/tests/fixtures';
     distDir = 'dist';
+    jsonBlueprint = null;
+    jsonBlueprintOverride = null;
   });
 
   beforeEach(function() {
@@ -43,6 +47,13 @@ describe('the deploy plugin object', function() {
         }
       }
     };
+
+    if (jsonBlueprint) {
+      context.config['json-config'].jsonBlueprint = jsonBlueprint;
+    }
+    if (jsonBlueprintOverride) {
+      context.config['json-config'].jsonBlueprintOverride = jsonBlueprintOverride;
+    }
 
     plugin.beforeHook(context);
     plugin.configure(context);
@@ -95,6 +106,90 @@ describe('the deploy plugin object', function() {
 
             assert.equal(Object.keys(json).length, 4);
           });
+      });
+    });
+  });
+
+  describe('configure hook', function() {
+    it('combinedBlueprint echos the default config when there are no options set', function() {
+      assert.deepEqual(plugin.defaultConfig.jsonBlueprint, plugin.combinedBlueprint);
+    });
+    describe('sending jsonBlueprint', function() {
+      var newBlueprint = {
+        script: {
+          'foo': 'bar'
+        }
+      };
+      before(function() {
+        jsonBlueprint = newBlueprint;
+        jsonBlueprintOverride = null;
+      });
+
+      it('changes combinedBlueprint', function() {
+        assert.deepEqual(newBlueprint, plugin.combinedBlueprint);
+      });
+    });
+    describe('send jsonBlueprintOverride', function() {
+
+      var newScript = {
+        'now': 'different'
+      };
+      before(function() {
+        jsonBlueprint = null;
+        jsonBlueprintOverride = {
+          script: newScript
+        };
+      });
+
+      it('modifies combinedBlueprint', function() {
+        var original = JSON.parse(JSON.stringify(plugin.defaultConfig.jsonBlueprint));
+        original.script = newScript;
+        assert.deepEqual(original, plugin.combinedBlueprint);
+      });
+    });
+    describe('send jsonBlueprintOverride with a new key', function() {
+
+      var newBody = {
+        'class': 'different'
+      };
+      before(function() {
+        jsonBlueprint = null;
+        jsonBlueprintOverride = {
+          body: newBody
+        };
+      });
+
+      it('appends to combinedBlueprint', function() {
+        var original = JSON.parse(JSON.stringify(plugin.defaultConfig.jsonBlueprint));
+        original.body = newBody;
+        assert.deepEqual(original, plugin.combinedBlueprint);
+      });
+    });
+    describe('send both jsonBlueprint and jsonBlueprintOverride', function() {
+      var newScript = {
+        'foo': 'bar'
+      };
+      var newBlueprint = {
+        meta: {
+          selector: 'meta[name*="/config/environment"]',
+          attributes: ['name', 'content']
+        },
+        script: {
+          selector: 'script',
+          attributes: ['src', 'integrity']
+        }
+      };
+      before(function() {
+        jsonBlueprint = newBlueprint;
+        jsonBlueprintOverride = {
+          script: newScript
+        }
+      });
+
+      it('still works', function() {
+        var blueprint = JSON.parse(JSON.stringify(newBlueprint));
+        blueprint.script = newScript;
+        assert.deepEqual(blueprint, plugin.combinedBlueprint);
       });
     });
   });

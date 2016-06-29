@@ -46,7 +46,17 @@ module.exports = {
             selector: 'script',
             attributes: ['src', 'integrity']
           }
-        }
+        },
+        jsonBlueprintOverride: {},
+      },
+
+      configure: function(context){
+        this._super.configure.call(this, context);
+        var override = this.readConfig('jsonBlueprintOverride');
+        var blueprint = this.readConfig('jsonBlueprint');
+        for (var key in override) { blueprint[key] = override[key]; }
+
+        this.combinedBlueprint = blueprint;
       },
 
       didBuild: function(context) {
