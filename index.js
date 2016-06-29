@@ -52,9 +52,9 @@ module.exports = {
 
       configure: function(context){
         this._super.configure.call(this, context);
-        let override = this.readConfig('jsonBlueprintOverride');
-        let blueprint = this.readConfig('jsonBlueprint');
-        for (let key in override) { blueprint[key] = override[key]; }
+        var override = this.readConfig('jsonBlueprintOverride');
+        var blueprint = this.readConfig('jsonBlueprint');
+        for (var key in override) { blueprint[key] = override[key]; }
 
         this.combinedBlueprint = blueprint;
       },

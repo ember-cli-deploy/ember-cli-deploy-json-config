@@ -15,17 +15,15 @@ describe('extract-index-config', function() {
     var contents = fs.readFileSync(process.cwd() + '/tests/fixtures/dist/index.html');
 
     var plugin = {
-      readConfig: function(key) {
-        return {
-          base: {
-            selector: 'base',
-            attributes: ['href']
-          },
-          script: {
-            selector: 'script',
-            attributes: ['src']
-          }
-        };
+      combinedBlueprint: {
+        base: {
+          selector: 'base',
+          attributes: ['href']
+        },
+        script: {
+          selector: 'script',
+          attributes: ['src']
+        }
       }
     };
 
