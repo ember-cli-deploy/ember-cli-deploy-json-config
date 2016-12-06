@@ -67,6 +67,45 @@ The root directory where the file matching `fileInputPattern` will be searched f
 
 *Default:* `context.distDir`
 
+### jsonBlueprint
+
+The blueprint indicating what fields to read from the HTML file and convert into JSON.
+
+*Default:*
+```javascript
+base: {
+  selector: 'base',
+  attributes: ['href']
+},
+meta: {
+  selector: 'meta[name*="/config/environment"]',
+  attributes: ['name', 'content']
+},
+link: {
+  selector: 'link',
+  attributes: ['rel', 'href', 'integrity']
+},
+script: {
+  selector: 'script',
+  attributes: ['src', 'integrity'],
+  includeContent: false,
+}
+```
+
+### includeContent
+By default only the attributes of `<script>` tags are read and included in the
+JSON output.  If you wish to include the content of the script tag you must specify that.
+```javascript
+ENV['json-config'] = {
+  jsonBlueprint(context, pluginHelper) {
+    var jsonBlueprint = pluginHelper.readConfigDefault('jsonBlueprint');
+    jsonBlueprint.script.includeContent = true;
+
+    return jsonBlueprint;
+  }
+};
+```
+
 ## What does a converted index.html file look like?
 
 The basic index.html file built by ember-cli will look soemething like this:

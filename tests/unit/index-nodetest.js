@@ -9,10 +9,13 @@ describe('the deploy plugin object', function() {
   var plugin;
   var promise;
   var distDir;
+  var jsonBlueprint;
+  var context;
 
   before(function() {
     fakeRoot = process.cwd() + '/tests/fixtures';
     distDir = 'dist';
+    jsonBlueprint = false;
   });
 
   beforeEach(function() {
@@ -28,7 +31,7 @@ describe('the deploy plugin object', function() {
       name: 'json-config'
     });
 
-    var context = {
+    context = {
       ui: mockUi,
       config: {
         'json-config': {
@@ -43,6 +46,10 @@ describe('the deploy plugin object', function() {
         }
       }
     };
+
+    if (jsonBlueprint) {
+      context.config['json-config'].jsonBlueprint = jsonBlueprint;
+    }
 
     plugin.beforeHook(context);
     plugin.configure(context);
@@ -63,7 +70,8 @@ describe('the deploy plugin object', function() {
     it('generates index.json from index.html', function() {
       return assert.isFulfilled(promise)
         .then(function() {
-          var json = require(fakeRoot + '/dist/index.json');
+          var contents = fs.readFileSync(fakeRoot + '/dist/index.json');
+          var json = JSON.parse(contents);
 
           assert.equal(Object.keys(json).length, 4);
 
@@ -73,6 +81,7 @@ describe('the deploy plugin object', function() {
           assert.deepEqual(json.link[1], { rel: 'stylesheet', href: 'assets/app.css' });
           assert.deepEqual(json.script[0], { src: 'assets/vendor.js', integrity: 'sha256-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC' });
           assert.deepEqual(json.script[1], { src: 'assets/app.js' });
+          assert.deepEqual(json.script[2], { });
         });
     });
 
@@ -94,6 +103,32 @@ describe('the deploy plugin object', function() {
             var json = require(fakeRoot + '/dist/index.json');
 
             assert.equal(Object.keys(json).length, 4);
+          });
+      });
+    });
+
+    describe('when we ask for script tag contents', function() {
+      before(function() {
+        jsonBlueprint = {
+          script: {
+            selector: 'script',
+            attributes: [],
+            includeContent: true,
+          }
+        };
+      });
+
+      it('provides the contents of the script tag', function() {
+        return assert.isFulfilled(promise)
+          .then(function() {
+            var contents = fs.readFileSync(fakeRoot + '/dist/index.json');
+            var json = JSON.parse(contents);
+
+            assert.equal(Object.keys(json).length, 1);
+
+            assert.deepEqual(json.script[0], {});
+            assert.deepEqual(json.script[1], {});
+            assert.deepEqual(json.script[2], { content: "var a = 'foo';"});
           });
       });
     });
