@@ -1,3 +1,8 @@
+## [0.3.0](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/tree/0.3.0) (2016-12-06)
+[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/compare/v0.2.0...0.3.0)
+
+- [#25](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/pull/25) Support Inline scripts [@jrjohnson](https://github.com/jrjohnson)
+
 ## [0.2.0](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/tree/0.2.0) (2016-02-06)
 [Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/compare/v0.1.0...0.2.0)
 
