@@ -184,6 +184,16 @@ The following properties are expected to be present on the deployment `context` 
 
 [ember-cli-deploy-redis](https://github.com/ember-cli-deploy/ember-cli-deploy-redis)
 
+## Caveats with other plugins
+#### ember-cli-deploy-gzip
+If you're using this plugin along with [ember-cli-deploy-gzip](https://github.com/ember-cli-deploy/ember-cli-deploy-gzip) you'll need to add an exception in your gzip config in `deploy.js`:
+
+```
+gzip: {
+  ignorePattern: 'index.json'
+}
+```
+
 ## Running Tests
 
 - `npm test`
