@@ -1,11 +1,10 @@
+/*eslint-env node*/
 'use strict';
 
 var fs     = require('fs');
-var path   = require('path');
-var chai  = require('chai');
+var chai   = require('chai');
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
-
 var assert = chai.assert;
 
 describe('the deploy plugin object', function() {
@@ -23,7 +22,7 @@ describe('the deploy plugin object', function() {
   });
 
   beforeEach(function() {
-    var subject = require('../../index');
+    var subject = require('../index');
     var jsonPath = fakeRoot + '/dist/index.json';
     if (fs.existsSync(jsonPath)) {
       fs.unlinkSync(jsonPath);
@@ -41,10 +40,10 @@ describe('the deploy plugin object', function() {
         'json-config': {
           fileInputPattern: 'index.html',
           fileOutputPattern: 'index.json',
-          distDir: function(context) {
+          distDir: function(/* context */) {
             return distDir;
           },
-          projectRoot: function(context) {
+          projectRoot: function(/* context */) {
             return fakeRoot;
           }
         }
