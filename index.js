@@ -1,10 +1,9 @@
-/* jshint node: true */
+/*eslint-env node*/
 'use strict';
 
 var path      = require('path');
 var fs        = require('fs');
 var RSVP      = require('rsvp');
-var Promise   = RSVP.Promise;
 var denodeify = RSVP.denodeify;
 
 var readFile  = denodeify(fs.readFile);
@@ -50,7 +49,7 @@ module.exports = {
         }
       },
 
-      didBuild: function(context) {
+      didBuild: function(/* context */) {
         var root               = this.readConfig('projectRoot');
         var distDir            = this.readConfig('distDir');
         var fileInputPattern   = this.readConfig('fileInputPattern');
@@ -75,7 +74,7 @@ module.exports = {
       _successMessage: function(outputPath, fileOutputPattern) {
         this.log('generated: `' + outputPath + '`', { verbose: true });
         this.log('added `' + fileOutputPattern + '` to `context.distFiles`', { verbose: true });
-        return Promise.resolve();
+        return RSVP.resolve();
       },
 
       _errorMessage: function(error) {
@@ -83,7 +82,7 @@ module.exports = {
         if (error) {
           this.log(error.stack, { color: 'red' });
         }
-        return Promise.reject(error);
+        return RSVP.reject(error);
       }
     });
 

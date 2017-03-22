@@ -1,9 +1,9 @@
+/*eslint-env node*/
 'use strict';
 
-var chai = require('chai');
+var chai  = require('chai');
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
-
 var assert = chai.assert;
 
 var fs = require('fs');
@@ -12,14 +12,14 @@ describe('extract-index-config', function() {
   var subject;
 
   before(function() {
-    subject = require('../../../../lib/utilities/extract-index-config');
+    subject = require('../../../lib/utilities/extract-index-config');
   });
 
   it('extracts the correct default config', function() {
     var contents = fs.readFileSync(process.cwd() + '/tests/fixtures/dist/index.html');
 
     var plugin = {
-      readConfig: function(key) {
+      readConfig: function(/* key */) {
         return {
           base: {
             selector: 'base',
@@ -50,7 +50,7 @@ describe('extract-index-config', function() {
     var contents = fs.readFileSync(process.cwd() + '/tests/fixtures/dist/index.html');
 
     var plugin = {
-      readConfig: function(key) {
+      readConfig: function(/* key */) {
         return {
           script: {
             selector: 'script',
