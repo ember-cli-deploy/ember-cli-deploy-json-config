@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-deploy-json-config",
-  "version": "0.3.0",
+  "version": "1.0.0-beta.0",
   "description": "An ember-cli-deploy plugin to convert index.html to json config",
   "keywords": [
     "ember-addon",
@@ -16,7 +16,6 @@
   "scripts": {
     "test": "node tests/runner.js && ./node_modules/.bin/eslint index.js lib/**/*.js tests/**/*-test.js"
   },
-  "repository": "https://github.com/ember-cli-deploy/ember-cli-deploy-json-config",
   "engines": {
     "node": ">= 4"
   },
@@ -31,10 +30,6 @@
     "mocha": "^3.2.0",
     "multiline": "^1.0.2"
   },
-  "keywords": [
-    "ember-addon",
-    "ember-cli-deploy-plugin"
-  ],
   "dependencies": {
     "chalk": "^1.0.0",
     "cheerio": "^0.22.0",
