@@ -202,6 +202,6 @@ gzip: {
 
 Since this is a node-only ember-cli addon, this package does not include many files and dependencies which are part of ember-cli's typical `ember build` and `ember test` processes.
 
-[1]: http://ember-cli.github.io/ember-cli-deploy/plugins "Plugin Documentation"
+[1]: http://ember-cli-deploy.com/docs/v1.0.x/using-plugins/ "Plugin Documentation"
 [2]: https://github.com/ember-cli-deploy/ember-cli-deploy-build "ember-cli-deploy-build"
 [3]: https://github.com/ember-cli/ember-cli-deploy "ember-cli-deploy"
