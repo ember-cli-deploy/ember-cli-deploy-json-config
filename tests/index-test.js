@@ -135,5 +135,29 @@ describe('the deploy plugin object', function() {
           });
       });
     });
+
+    describe('when we ask for a tags html', function() {
+      before(function() {
+        jsonBlueprint = {
+          noScript: {
+            selector: 'noscript',
+            attributes: [],
+            includeHtmlContent: true,
+          }
+        };
+      });
+
+      it('provides the html contents of the tag', function() {
+        return assert.isFulfilled(promise)
+          .then(function() {
+            var contents = fs.readFileSync(fakeRoot + '/dist/index.json');
+            var json = JSON.parse(contents);
+
+            assert.equal(Object.keys(json).length, 1);
+
+            assert.deepEqual(json.noScript[0], { htmlContent: "No Ember for You!"});
+          });
+      });
+    });
   });
 });

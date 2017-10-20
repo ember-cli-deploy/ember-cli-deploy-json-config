@@ -106,6 +106,38 @@ ENV['json-config'] = {
 };
 ```
 
+### includeHtmlContent
+Use `includeHtmlContent` to include the contents of an HTML tag including other HTML tags.  
+
+For example if you have HTML like:
+
+```html
+<noscript>
+<p>This won't work without Javascript.</p>
+</noscript>
+
+Then 
+```javascript
+ENV['json-config'] = {
+  jsonBlueprint: {
+    noScript = {
+      selector: 'noScript',
+      includeHtmlContent: true,
+    };
+  }
+};
+```
+Would result in `JSON` of:
+
+```json
+"noScript": [
+    {
+      "htmlContent": "<p>This won't work without Javascript.</p>"
+    }
+  ],
+];
+```
+
 ## What does a converted index.html file look like?
 
 The basic index.html file built by ember-cli will look soemething like this:
