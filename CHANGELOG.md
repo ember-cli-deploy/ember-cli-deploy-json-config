@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.1](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/tree/v1.0.1) (2017-10-22)
+[Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/compare/v1.0.0...v1.0.1)
+
+**Merged pull requests:**
+
+- \#35 Include HTML content in the JSON output #35 [\#35](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/pull/35) ([jrjohnson](https://github.com/jrjohnson))
+
 ## [v1.0.0](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/tree/v1.0.0) (2017-04-05)
 [Full Changelog](https://github.com/ember-cli-deploy/ember-cli-deploy-json-config/compare/v1.0.0-beta.0...v1.0.0)
 
