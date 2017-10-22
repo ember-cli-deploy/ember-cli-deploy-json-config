@@ -72,4 +72,29 @@ describe('extract-index-config', function() {
         assert.deepEqual(json.script[2], { content: "var a = 'foo';" });
       });
   });
+
+  it('extracts html contents when specified', function() {
+    var contents = fs.readFileSync(process.cwd() + '/tests/fixtures/dist/index.html');
+
+    var plugin = {
+      readConfig: function(/* key */) {
+        return {
+          noscriptTag: {
+            selector: 'noscript',
+            attributes: false,
+            includeHtmlContent: true
+          }
+        };
+      }
+    };
+
+    return assert.isFulfilled(subject.call(plugin, contents))
+      .then(function(config) {
+        var json = JSON.parse(config);
+
+        assert.equal(1, Object.keys(json).length);
+
+        assert.deepEqual(json.noscriptTag[0], { htmlContent: "No Ember for You!" });
+      });
+  });
 });
